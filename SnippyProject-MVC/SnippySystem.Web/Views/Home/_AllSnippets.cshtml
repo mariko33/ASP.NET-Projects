@@ -1,0 +1,36 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model PagedList.PagedList<SnippySystem.Models.ViewModels.Home.SnippetViewModel>
+
+<link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+
+
+@{
+    ViewBag.Title = "All Snippets";
+}
+
+
+
+
+    @foreach (var m in Model)
+    {
+        <div class="snippet-container">
+            <div>@Html.ActionLink(m.Title, "Details", "Snippet", new { id = m.Id }, new { @class = "act-link-class" })</div>
+
+            @foreach (var label in m.Labels)
+            {
+            <button class="btn btn-default">@Html.ActionLink(label.Text,"Details","Labels",new{id=label.Id},null)</button>
+            }
+        </div>
+
+    }
+
+
+    <div class="col-sm-10">
+        <div class="align-text-bottom" id="pagin">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new {page, pageSize = Model.PageSize}))
+        </div>
+    </div>
+

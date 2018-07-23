@@ -1,0 +1,42 @@
+﻿@model SnippySystem.Models.ViewModels.Home.HomeIndexViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+    
+}
+
+<div class="row">
+        <div class="col-md-4">
+            <h2>Latest snippets:</h2>
+
+            @Html.Action("AllSnippets", "Home")
+           
+        </div>
+        <div class="col-md-5">
+
+            <h2>Latest comments:</h2>
+            @foreach (var c in Model.Comments.Take(5))
+            {
+                <div class="comments">
+                    <p>@c.Content</p>
+                    <div><i class="fa fa-user" aria-hidden="true"></i> <strong>@c.Author.User.Name</strong> on @c.CreationTime</div>
+                    <div>on snippet @c.Snippet.Description</div>
+                </div>
+            }
+
+        </div>
+        <div class="col-md-3">
+            <h2>Best labels</h2>
+            <table>
+                @foreach (var l in Model.Labels.Take(5))
+                {
+                    <tr>
+                        <td class="col-md-8"><p>@l.Text</p></td>
+                        <td class="col-md-4"><p>@l.Snippets.Count</p></td>
+                    </tr>
+
+                }
+            </table>
+
+        </div>
+    </div>

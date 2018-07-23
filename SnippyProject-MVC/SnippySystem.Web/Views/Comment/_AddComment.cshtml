@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNet.Identity
+@model SnippySystem.Models.ViewModels.Comments.AddCommentViewModel
+
+@{
+    ViewBag.Title = "AddComent";
+}
+
+<div class="form-group">
+    @Html.ValidationMessageFor(m => m.Content)
+
+    <div class="form-control">
+        @Html.TextAreaFor(m=>m.Content,new {@class="col-md-12"})
+        
+    </div>
+    <div class="text-hide">
+        @Html.EditorFor(m=>m.SnippetId)
+    </div>
+    <div class="text-hide">
+        <input type="text" value=@User.Identity.GetUserId() name="UserId"/>
+    </div>
+
+    <input type="submit" value="Add Comment" class="btn btn-success" />
+</div>

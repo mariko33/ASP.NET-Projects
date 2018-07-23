@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNet.Identity
+
+@model SnippySystem.Models.ViewModels.Home.SnippetViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+
+<h2>@Html.ActionLink(Model.Language.Name, "LanguageSnippets", "Language", new { id = Model.Language.Id }, new { @class = "btn btn-primary" }) @Model.Title</h2>
+
+
+<div>by <i class="fa fa-user" aria-hidden="true"></i> @Model.Author.User.Name on @Model.CreationTime</div>
+<p>
+    Labels: @foreach (var label in Model.Labels)
+    {
+        <button class="btn btn-default">@Html.ActionLink(label.Text, "LabelDetails", "Label")</button>
+    }
+</p>
+
+<p>@Model.Description</p>
+
+<div class="comments">
+    @Model.Code
+</div>
+
+    <h3>Comments:</h3>
+
+    @if (Request.IsAuthenticated)
+    {
+        using (Ajax.BeginForm("AddComment", "Comment", new AjaxOptions
+        {
+            HttpMethod = "POST",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "comments-update"
+        }))
+            {
+                @Html.Action("AddComment", "Comment", new {id=Model.Id})
+         }
+
+        }
+
+    @{
+    if (Model.Comments.Count == 0)
+    {
+        <p>There are no comments right now.</p>
+    }
+    else
+    {
+        foreach (var comment in Model.Comments.OrderByDescending(m=>m.CreationTime))
+        {
+            <div class="comments" id="comments-update">
+                @if (Request.IsAuthenticated && User.Identity.GetUserId() == Model.Author.User.Id)
+                {
+                    @Html.ActionLink("x", "DeleteComment", "Comment", new { id = comment.Id}, new {@class= "delete-comment" })
+
+                                                                                                                        
+                }
+                <p>@comment.Content</p>
+                <p><i class="fa fa-user" aria-hidden="true"></i> @comment.Author.User.Name on @comment.CreationTime</p>
+            </div>
+        }
+    }
+}
+
+</div>

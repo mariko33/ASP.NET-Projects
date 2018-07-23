@@ -1,0 +1,75 @@
+﻿@using PagedList.Mvc
+@model PagedList.PagedList<PurchaseControlSystem.Web.Models.ViewModels.PurchaseOrderVm>
+
+
+@{
+    ViewBag.Title = "Home Page";
+    
+}
+
+<div id="content">
+    <h1>Purchase Orders</h1>
+
+    @Html.ActionLink("Create new order", "CreateOrder")
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-md-1">@Html.ActionLink("№", "Index", "Home", new { SortOrder = ViewBag.SortId }, new { @class = "alert-link" })</th>
+                    <th scope="col" class="col-md-5">@Html.ActionLink("Description", "Index", "Home", new { SortOrder = ViewBag.SortDescription }, new { @class = "alert-link" })</th>
+                    <th scope="col" class="col-md-1">@Html.ActionLink("Price", "Index", "Home", new { SortOrder = ViewBag.SortPrice }, new { @class = "alert-link" })</th>
+                    <th scope="col" class="col-md-1">@Html.ActionLink("Quantity", "Index", "Home", new { SortOrder = ViewBag.SortQuantity }, new { @class = "alert-link" })</th>
+                    <th scope="col" class="col-md-2">Total Amount</th>
+
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+                    {
+
+                        <th scope="col" class="col-md-2">
+                            @Html.DropDownList("Status", new SelectList(ViewBag.Status, "ViewBag.SelectedStatus"), "All", new { onchange = "form.submit();" })
+
+                        </th>
+
+
+                    }
+                </tr>
+
+            </thead>
+            <tbody>
+
+
+
+                @foreach (var oreder in Model)
+                {
+                    <tr>
+                        <th scope="row">@oreder.Id</th>
+                        <td>@oreder.Description</td>
+                        <td>@oreder.Price</td>
+                        <td>@oreder.Quantity</td>
+                        <td>@oreder.TotalAmount</td>
+                        <td>@oreder.Status</td>
+                        <td>@Html.ActionLink("Edit", "Edit", new { id = @oreder.Id })</td>
+                        <td>@Html.ActionLink("Details", "Details", new { id = @oreder.Id })</td>
+                        <td>@Html.ActionLink("Delete", "Delete", new { id = @oreder.Id })</td>
+                    </tr>
+
+
+
+                }
+
+
+            </tbody>
+
+
+        </table>
+    </div>
+
+
+    <div class="text-center">
+        <div class="col-sm-10">
+            <div class="align-text-bottom" id="pagin">
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { SortOrder = ViewBag.Sorted, Status = ViewBag.SelectedStatus, page, pageSize = Model.PageSize }))
+            </div>
+        </div>
+    </div>
+</div>

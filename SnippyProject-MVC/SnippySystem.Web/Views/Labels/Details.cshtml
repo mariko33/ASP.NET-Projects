@@ -1,0 +1,43 @@
+﻿@model SnippySystem.Models.ViewModels.Labels.LabelViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+
+@Html.ActionLink("All Labels","Index","Labels")
+
+<div>
+    <h4>Label</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+
+    </dl>
+    
+    <h3>All snippets with Label @Model.Text</h3>
+    
+    @foreach (var snippy in Model.Snippets)
+    {
+        <div class="snippet-container">
+            <div>@Html.ActionLink(snippy.Title, "Details", "Snippet", new { id = snippy.Id }, new { @class = "act-link-class" })</div>
+
+            @foreach (var label in snippy.Labels)
+            {
+                <button class="btn btn-default">@Html.ActionLink(label.Text,"Details","Labels",new{id=label.Id},null)</button>
+            }
+        </div>
+    }
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
